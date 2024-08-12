@@ -1,6 +1,5 @@
 import express from "express";
 const router = express.Router();
-
 //Build Simple API
 const posts = [
   { id: 1, title: "Post One" },
@@ -25,6 +24,12 @@ router.get("/:id", (req, res) => {
     return res.json(post); //return agr if mei use hojye to else ladder lagane ki zaroot nhi hogi
   }
   res.status(404).json({ message: "Post not found" });
+});
+//Create new Post
+router.post("/", (req, res) => {
+  console.log(req.body);
+  res.status(201).json(posts)
+  //201 response means that something was created by userx  
 });
 
 export default router;
