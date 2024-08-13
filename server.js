@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import post from "./router/post.js";
 import logger from "./middleware/logger.js";
+import errorHandler from "./middleware/error.js";
 const port = process.env.PORT;
 const app = express();
 
@@ -17,6 +18,10 @@ app.use(logger);
 
 //Routes
 app.use("/api/post", post);
+
+
+//Error HANDLER
+app.use(errorHandler)
 
 //Server port listen
 app.listen(port, () => {

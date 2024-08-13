@@ -16,14 +16,16 @@ router.get("/", (req, res) => {
 });
 
 // Get single post by id
-router.get("/:id", (req, res) => {
+router.get("/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
   const post = posts.find((post) => post.id === id);
 
-  if (post) {
-    return res.json(post); //return agr if mei use hojye to else ladder lagane ki zaroot nhi hogi
+  if (!post) {
+    const error = new Error(`A post with the id of ${id} was not found`);
+    error.status = 404;
+    return next(error);
   }
-  res.status(404).json({ message: "Post not found" });
+  res.status(200).json(post);
 });
 //Create new Post
 router.post("/", (req, res) => {
@@ -36,9 +38,8 @@ router.post("/", (req, res) => {
   }
   posts.push(newPost);
   res.status(201).json(posts);
-  //201 response means that something was created by userx
+  //201 response means that something was created by user~
 });
-
 
 // PUT Request
 router.put("/:id", (req, res) => {
@@ -51,15 +52,14 @@ router.put("/:id", (req, res) => {
   res.status(200).json(posts);
 });
 
-
 // Delete Request
-router.put("/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
   const id = parseInt(req.params.id);
-  const post = posts.find((post) => post.id === id);
-  if (!post) {
+  const index = posts.findIndex((post) => post.id === id);
+  if (index === -1) {
     return res.status(404).json({ msg: "Post not found" });
   }
-  posts = posts.filter((post) => post.id !== id);
+  posts.splice(index, 1);
   res.status(200).json(posts);
 });
 
